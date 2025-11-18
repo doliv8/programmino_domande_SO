@@ -942,7 +942,8 @@
     ],
     "soluzioni": [
       "Timer interrupt",
-      "I/O interrupt"
+      "I/O interrupt",
+      "Terminazione del processo"
     ]
   },
   {
@@ -984,6 +985,30 @@
       "Tempo di attesa",
       "Utilizzo della CPU",
       "Throughput"
+    ]
+  },
+  {
+    "domanda": "Qual è il principale vantaggio dell'uso dei pool di thread nei server rispetto alla creazione di un thread per ogni richiesta?",
+    "opzioni": [
+      "a. Aumentano sempre i tempi di attesa",
+      "b. Attraverso la creazione di un numero fisso di thread evitano la saturazione delle risorse",
+      "c. Ogni richiesta crea un nuovo thread",
+      "d. Impediscono di riutilizzare thread per richieste diverse"
+    ],
+    "soluzioni": [
+      "b. Attraverso la creazione di un numero fisso di thread evitano la saturazione delle risorse"
+    ]
+  },
+  {
+    "domanda": "Qual è lo scopo principale dello scheduler a medio/lungo termine?",
+    "opzioni": [
+      "a. Decidere quali processi mantenere in memoria e quali spostare sullo storage",
+      "b. Gestire le eccezioni hardware",
+      "c. Gestire l'ordine di esecuzione dei thread",
+      "d. Prelevare istruzioni singole dalla cache"
+    ],
+    "soluzioni": [
+      "a. Decidere quali processi mantenere in memoria e quali spostare sullo storage"
     ]
   }
   
