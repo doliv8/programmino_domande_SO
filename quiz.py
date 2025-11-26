@@ -14,6 +14,10 @@ campo_risposte_domanda = "risposte"
 
 nome_file = ""  # nome del file delle domande
 
+# tipologie di domande accettate
+# singola, multiple, aperta,
+
+
 # ------------------------------#
 
 
@@ -51,28 +55,9 @@ def genera_schermata_scelta_file():
     btn.pack(pady=20)
 
 
-def genera_schermata(finestra, dati, funzione_salta, img=None):
-    global punti
-
+def g_risp_multiple(finestra, dati):
     # estrai cose utili per comodità
-    domanda = dati["domanda"]
     opzioni = dati["opzioni"]
-    soluzioni = dati["soluzioni"]
-
-    # pulisci schiavo
-    for widget in finestra.winfo_children():
-        widget.destroy()
-
-    # DOMMANNDDA
-    # <--- Aumentato wraplength per finestre più larghe, ci sta gem
-    lbl_domanda = tk.Label(finestra, text=domanda, font=(
-        UI.dati_testo["font_titoli"], UI.dati_testo["dimensione_base"] + UI.dati_testo["diff_titoli"], "bold"), justify="center")
-    lbl_domanda.pack(pady=20, expand=True, fill='both')
-
-    if img is not None:
-        img_w = UI.crea_widget_immagine(finestra, f"{utils.config["path_img"]}{
-                                        img}", UI.dati_img["larghezza"], UI.dati_img["altezza"])
-        img_w.pack(pady=10)
 
     # carica opzioni della domanda
     lista_checkbuttons = []
@@ -94,57 +79,101 @@ def genera_schermata(finestra, dati, funzione_salta, img=None):
         chk.pack(anchor="w", pady=2)
         lista_checkbuttons.append((chk, var, opzione))
 
-    # LOGICA VALIDA
-    def valida_risposte():
-        global punti
-        count_giuste = 0
-        errore_commesso = False
+    return lista_checkbuttons
 
-        # creo un nuovo campo per tenere le riposte date
+
+def valida_risposte_multiple(dati, soluzioni, lista_checkbuttons):
+    global punti
+    count_giuste = 0
+    errore_commesso = False
+
+    # creo un nuovo campo per tenere le riposte date
+    if not dati[campo_check_domanda]:
+        dati[campo_risposte_domanda] = []
+
+    for chk_widget, var_value, testo_opzione in lista_checkbuttons:
+
+        is_selezionata = var_value.get()
+        is_corretta = testo_opzione in soluzioni
+
         if not dati[campo_check_domanda]:
-            dati[campo_risposte_domanda] = []
+            # calcolo punti
+            if is_selezionata and not is_corretta:
+                errore_commesso = True
 
-        for chk_widget, var_value, testo_opzione in lista_checkbuttons:
+            if is_selezionata and is_corretta:
+                count_giuste += 1
 
-            is_selezionata = var_value.get()
-            is_corretta = testo_opzione in soluzioni
+            # -------------------------
 
-            if not dati[campo_check_domanda]:
+            # segno le risposte date (solo se non ha mai risposto a questa domanda)
 
-                # calcolo punti
-                if is_selezionata and not is_corretta:
-                    errore_commesso = True
+            if is_selezionata:
+                dati[campo_risposte_domanda].append(testo_opzione)
 
-                if is_selezionata and is_corretta:
-                    count_giuste += 1
+        # ---------------------
 
-                # -------------------------
+        chk_widget.config(bg="#f0f0f0", fg="black")  # Reset
 
-                # segno le risposte date (solo se non ha mai risposto a questa domanda)
+        if is_corretta:
+            chk_widget.config(bg="lightgreen", selectcolor="lightgreen")
 
-                if is_selezionata:
-                    dati[campo_risposte_domanda].append(testo_opzione)
+        elif is_selezionata and not is_corretta:
+            chk_widget.config(bg="#ffcccc")
 
-            # ---------------------
+    # aggiorna i punti
+    if dati[campo_check_domanda] is False:  # controllo se ha già risposto alla domanda
+        if not errore_commesso and len(soluzioni) > 0:
+            tot_punti = (1 / len(soluzioni)) * count_giuste
+            punti += tot_punti
 
-            chk_widget.config(bg="#f0f0f0", fg="black")  # Reset
+    # segno la domanda come completata
+    dati[campo_check_domanda] = True
 
-            if is_corretta:
-                chk_widget.config(bg="lightgreen", selectcolor="lightgreen")
 
-            elif is_selezionata and not is_corretta:
-                chk_widget.config(bg="#ffcccc")
+def g_risp_singola(finestra,dati):
+    pass
 
-        # aggiorna i punti
-        if dati[campo_check_domanda] is False:  # controllo se ha già risposto alla domanda
-            if not errore_commesso and len(soluzioni) > 0:
-                tot_punti = (1 / len(soluzioni)) * count_giuste
-                punti += tot_punti
 
-        # segno la domanda come completata
-        dati[campo_check_domanda] = True
+def genera_schermata(finestra, dati, funzione_salta, img=None):
+    global punti
 
-    # tastini oja
+    # estrai cose utili per comodità
+    domanda = dati["domanda"]
+    soluzioni = dati["soluzioni"]
+    tipo_domanda = dati["tipologia"]
+
+    # dati opzioni caricate (in base alla tipologia)
+    dati_opzioni = None
+
+    # pulisci schiavo
+    for widget in finestra.winfo_children():
+        widget.destroy()
+
+    # DOMMANNDDA
+    # <--- Aumentato wraplength per finestre più larghe, ci sta gem
+    lbl_domanda = tk.Label(finestra, text=domanda, font=(
+        UI.dati_testo["font_titoli"], UI.dati_testo["dimensione_base"] + UI.dati_testo["diff_titoli"], "bold"), justify="center")
+    lbl_domanda.pack(pady=20, expand=True, fill='both')
+
+    # controllo immagine (e caricamento)
+    if img is not None:
+        img_w = UI.crea_widget_immagine(finestra, f"{utils.config["path_img"]}{
+                                        img}", UI.dati_img["larghezza"], UI.dati_img["altezza"])
+        img_w.pack(pady=10)
+
+    # CARICA OPZIONI (in base al tipo di domande)
+
+    match tipo_domanda:
+        case "multiple": dati_opzioni = g_risp_multiple(finestra,dati)
+
+    # LOGICA VALIDA (in base alla tipologia)
+
+    def valida_risposte():
+        match tipo_domanda:
+            case "multiple": valida_risposte_multiple(dati,soluzioni,dati_opzioni)
+
+    # tastini oja (indietro, valida, salta/prossima)
     frame_tasti = tk.Frame(finestra)
     frame_tasti.pack(side="bottom", pady=20)
 
