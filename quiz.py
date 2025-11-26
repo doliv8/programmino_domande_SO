@@ -69,7 +69,7 @@ def g_risp_multiple(finestra, dati):
     for opzione in temp_opzioni:
         var = tk.BooleanVar()
 
-        if dati[campo_check_domanda]:
+        if dati[campo_check_domanda]:   # controllo domanda già validata
             if opzione in dati[campo_risposte_domanda]:
                 var.set(True)
 
@@ -145,11 +145,11 @@ def g_risp_singola(finestra,dati):  # estrai cose utili per comodità
 
     # Set risposta data precedentemente (se verificata)
     if dati[campo_check_domanda]:
-        var.set(dati[campo_risposte_domanda[0]])    # può avere solo una soluzione, quindi segno la prima
+        var.set(dati[campo_risposte_domanda][0])    # può avere solo una soluzione, quindi segno la prima
     for opzione in temp_opzioni:
 
         # Aggiunto wraplength anche alle opzioni per evitare che escano dallo schermo, super mario karta
-        radio_b = tk.Radiobutton(frame_opzioni, text=opzione, variable=var, font=(
+        radio_b = tk.Radiobutton(frame_opzioni, text=opzione, variable=var, value=opzione, font=(
             UI.dati_testo["font_testo"], UI.dati_testo["dimensione_base"]), selectcolor="white", wraplength=500, justify="left")
         radio_b.pack(anchor="w", pady=2)
         lista_radiobutton.append((radio_b, var, opzione))
@@ -167,7 +167,7 @@ def valida_risposta_singola(dati,soluzioni,lista_radiobutton):
 
     for radio_widget, var_value, testo_opzione in lista_radiobutton:
 
-        is_selezionata = var_value.get()
+        is_selezionata = var_value.get() == testo_opzione
         is_corretta = testo_opzione in soluzioni
 
         if not dati[campo_check_domanda]:  # controllo domanda non ancora verificata
@@ -201,11 +201,58 @@ def valida_risposta_singola(dati,soluzioni,lista_radiobutton):
 
 
 def g_risp_aperta(finestra, dati):
-    pass
+
+    # carica area di testo
+
+    frame_opzioni = tk.Frame(finestra)
+    frame_opzioni.pack(pady=10)
+
+    text_area = tk.Text(frame_opzioni, height=8, width=30, font=(
+        UI.dati_testo["font_testo"], UI.dati_testo["dimensione_base"]))
+    text_area.pack()
+
+    # Set risposta data precedentemente (se verificata)
+    if dati[campo_check_domanda]:
+        text_area.insert("1.0", dati[campo_risposte_domanda][0])    # può avere solo una soluzione, quindi segno la prima
+
+    return text_area
 
 
-def valida_risposta_aperta(dati,soluzioni,text_area):
-    pass
+def valida_risposta_aperta(finestra, dati,soluzioni,text_area):
+    global punti
+
+    testo_correzione = ""   # testo mostrato dopo la validazione
+    isCorretta = False  # ipotizzo errata
+
+    risposta = text_area.get("1.0", "end-1c")  # recupero il testo inserito
+
+    # controllo risposta corretta
+    isCorretta = risposta in soluzioni
+
+    if not dati[campo_check_domanda]:   # controllo risposta mai validata
+        dati[campo_risposte_domanda] = []
+
+        dati[campo_risposte_domanda].append(risposta)  # aggiungo la risposta data
+
+        if isCorretta:   # aggiunta punto se corretta
+            punti += 1
+
+    # stampa soluzione
+    if isCorretta:
+        testo_correzione = "CORRETTA!"
+    else:
+        testo_correzione = f"ERRATA! {'risposta corretta:'if len(soluzioni) == 1 else 'risposte corrette:'} {';'.join(soluzioni)}"
+
+    widget_risposta = tk.Label(finestra, text=testo_correzione, font=(UI.dati_testo["font_titoli"], UI.dati_testo["dimensione_base"] + UI.dati_testo["diff_titoli"], "bold"), justify="center")
+    widget_risposta.pack(pady=20)  # , expand=True, fill='both'
+
+    if isCorretta:
+        widget_risposta.config(bg="lightgreen")
+    else:
+        widget_risposta.config(bg="#ffcccc")
+
+    # segno la domanda come completata
+    dati[campo_check_domanda] = True
 
 
 def genera_schermata(finestra, dati, funzione_salta, img=None):
@@ -247,8 +294,8 @@ def genera_schermata(finestra, dati, funzione_salta, img=None):
     def valida_risposte():
         match tipo_domanda:
             case "multiple": valida_risposte_multiple(dati,soluzioni,dati_opzioni)
-            case "singola": dati_opzioni = valida_risposta_singola(dati,soluzioni,dati_opzioni)
-            case "aperta": dati_opzioni = valida_risposta_aperta(dati,soluzioni,dati_opzioni)
+            case "singola": valida_risposta_singola(dati,soluzioni,dati_opzioni)
+            case "aperta": valida_risposta_aperta(finestra, dati,soluzioni,dati_opzioni)
 
     # tastini oja (indietro, valida, salta/prossima)
     frame_tasti = tk.Frame(finestra)
@@ -303,12 +350,16 @@ def genera_schermata(finestra, dati, funzione_salta, img=None):
 
     def aggiorna_wraplength(event):
         # Imposta il wraplength alla larghezza della finestra meno un margine (es. 40px)
-        lbl_domanda.config(
-            wraplength=finestra.winfo_width() - UI.margine_finestre)
-        label_N_domande.config(
-            wraplength=finestra.winfo_width() - UI.margine_finestre)
-        label_punti.config(
-            wraplength=finestra.winfo_width() - UI.margine_finestre)
+
+        if lbl_domanda.winfo_exists():
+            lbl_domanda.config(
+                wraplength=finestra.winfo_width() - UI.margine_finestre)
+        if label_N_domande.winfo_exists():
+            label_N_domande.config(
+                wraplength=finestra.winfo_width() - UI.margine_finestre)
+        if label_punti.winfo_exists():
+            label_punti.config(
+                wraplength=finestra.winfo_width() - UI.margine_finestre)
     finestra.bind('<Configure>', aggiorna_wraplength)
 
     # valida automaticamente (senza dare punti) se la domanda è già stata completata
@@ -321,6 +372,15 @@ def inizio_quiz():
 
     if lista_domande_caricata:
         carica_nuova_domanda()
+
+
+def deduci_tipologia(n_opzioni, n_soluzioni):
+    if n_opzioni > 0 and n_soluzioni > 1:
+        return "multiple"
+    if n_opzioni > 0 and n_soluzioni == 1:
+        return "singola"
+
+    return "aperta"
 
 
 def inizializza_dati():
@@ -339,10 +399,17 @@ def inizializza_dati():
             "Errore", f"Il file {nome_file} non è formattato correttamente.")
         root.destroy()
 
-    # aggiungo campo di verifica della risposta a ciascuna domanda
+    # aggiungo campo di verifica della risposta a ciascuna domanda, controllo inserimento tipologia
     for item in lista_domande_caricata:
         # (non ancora completata, e grazie alla pisella)
         item[campo_check_domanda] = False
+
+        # controllo esistenza campo tipologia
+        try:
+            item["tipologia"]
+        except Exception:
+            item["tipologia"] = deduci_tipologia(len(item["opzioni"]), len(item["soluzioni"]))
+            print(f"settata tipoligia: {item["tipologia"]}")
 
     # randomizza le domande
     lista_domande_caricata = utils.randomizza_lista(lista_domande_caricata)
