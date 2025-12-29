@@ -284,8 +284,11 @@ def g_risp_aperta(finestra, dati):
     return text_area
 
 
+widget_risposta = None
+
+
 def valida_risposta_aperta(finestra, dati,soluzioni,text_area):
-    global punti
+    global punti, widget_risposta
 
     testo_correzione = ""   # testo mostrato dopo la validazione
     isCorretta = False  # ipotizzo errata
@@ -309,6 +312,8 @@ def valida_risposta_aperta(finestra, dati,soluzioni,text_area):
     else:
         testo_correzione = f"ERRATA! {'risposta corretta:'if len(soluzioni) == 1 else 'risposte corrette:'} {';'.join(soluzioni)}"
 
+    if widget_risposta is not None:
+        widget_risposta.destroy()
     widget_risposta = tk.Label(finestra, text=testo_correzione, font=(UI.dati_testo["font_titoli"], UI.dati_testo["dimensione_base"] + UI.dati_testo["diff_titoli"], "bold"), justify="center")
     widget_risposta.pack(pady=20)  # , expand=True, fill='both'
 
