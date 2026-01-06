@@ -255,11 +255,11 @@
       "Quando si usa la bitmap è utile una ISA che preveda istruzioni di salto basate su singolo bit",
       "Si usa sempre una bitmap",
       "Si può usare l'allocazione indicizzata insieme a una bitmap",
-      "Utilizzando l'allocazione indicizzata si ottimizza il caso di disco vuoto rispetto all'uso di una bitmap"
+      "Utilizzando l'allocazione indicizzata si ottimizza il caso di disco pieno rispetto all'uso di una bitmap"
     ],
     "soluzioni": [
       "Quando si usa la bitmap è utile una ISA che preveda istruzioni di salto basate su singolo bit",
-      "Utilizzando l'allocazione indicizzata si ottimizza il caso di disco vuoto rispetto all'uso di una bitmap"
+      "Utilizzando l'allocazione indicizzata si ottimizza il caso di disco pieno rispetto all'uso di una bitmap"
     ],
     "tipologia": "multiple"
   },
@@ -335,7 +335,7 @@
       "E= Indirizzo Logico",
       "B=p= numero di pagina",
       "M=d= dimensione del segmento",
-      "L=f= del segmento",
+      "L=f= numero del segmento",
       "c=f= frame che ha dimensione uguale a quella della pagina"
     ],
     "soluzioni": [
