@@ -841,5 +841,188 @@
     ],
     "soluzioni": ["No, non è corretta"],
     "tipologia": "singola"
+  },
+  {
+    "domanda": "Convenzionalmente, il file descriptor con ID pari a 0 (zero) identifica:",
+    "opzioni": [
+      "Lo 'standard output'",
+      "Lo 'standard error'",
+      "Lo 'standard input'"
+    ],
+    "soluzioni": [
+      "Lo 'standard input'"
+    ],
+    "tipologia": "singola"
+  },
+  {
+    "domanda": "Trascinare (selezionare) la corretta istruzione all'interno nel seguente codice per eseguire 'ls -l':",
+    "opzioni": [
+      "execl(\"/bin/ls\", \"-l\", NULL);",
+      "execl(\"/bin/\", \"ls -l\", (char *)0);",
+      "execl(\"/bin/ls\", \"-l\", \"NULL\");"
+    ],
+    "soluzioni": [
+      "execl(\"/bin/ls\", \"-l\", NULL);"
+    ],
+    "tipologia": "singola",
+    "img": "lab_025.png"
+  },
+  {
+    "domanda": "Selezionare il corretto prototipo della system call 'pipe':",
+    "opzioni": [
+      "int pipe(char filedes[2])",
+      "int pipe(int filedes[2])",
+      "void pipe(int filedes[2])"
+    ],
+    "soluzioni": [
+      "int pipe(int filedes[2])"
+    ],
+    "tipologia": "singola"
+  },
+  {
+    "domanda": "Nell'ambito delle system call 'wait' e 'waitpid', con 'WEXITSTATUS(status)':",
+    "opzioni": [
+      "Accediamo al valore restituito dalla wait",
+      "Otteniamo un valore di tipo True se il processo termina normalmente",
+      "Accediamo al valore restituito dalla exit"
+    ],
+    "soluzioni": [
+      "Accediamo al valore restituito dalla exit"
+    ],
+    "tipologia": "singola"
+  },
+  {
+    "domanda": "La system call getppid fornisce:",
+    "opzioni": [
+      "Il PID del processo genitore",
+      "Il PID del processo corrente",
+      "Il PID del processo figlio"
+    ],
+    "soluzioni": [
+      "Il PID del processo genitore"
+    ],
+    "tipologia": "singola"
+  },
+  {
+    "domanda": "In caso di successo, i processi padre e figlio iniziano la loro esecuzione dopo la system call fork()",
+    "opzioni": [
+      "No, inizia prima il padre",
+      "No, inizia prima il figlio",
+      "Corretto"
+    ],
+    "soluzioni": [
+      "Corretto"
+    ],
+    "tipologia": "singola"
+  },
+  {
+    "domanda": "Valutare la correttezza dell'affermazione 'l'accesso concorrente a dati condivisi può provocare l'inconsistenza dei dati stessi, in mancanza di strumenti di gestione opportuni'",
+    "opzioni": [
+      "L'affermazione è corretta",
+      "L'affermazione non è corretta",
+      "L'affermazione è corretta parzialmente"
+    ],
+    "soluzioni": [
+      "L'affermazione è corretta"
+    ],
+    "tipologia": "singola"
+  },
+  {
+    "domanda": "La 'race condition' è:",
+    "opzioni": [
+      "Una situazione nella quale due o più processi leggono o scrivono dei dati condivisi, ed in tale contesto il risultato finale dipende dalle loro tempistiche",
+      "Una situazione nella quale un processo o thread legge o scrive dei dati e il risultato finale dipende dalla sua tempistica",
+      "Una situazione nella quale due o più programmi leggono o scrivono dei dati condivisi, ed il risultato finale dipende dalle loro tempistiche"
+    ],
+    "soluzioni": [
+      "Una situazione nella quale due o più processi leggono o scrivono dei dati condivisi, ed in tale contesto il risultato finale dipende dalle loro tempistiche"
+    ],
+    "tipologia": "singola"
+  },
+  {
+    "domanda": "In ncurses l'angolo in basso a sinistra ha coordinate:",
+    "opzioni": [
+      "(x=0, y=LINES-1)",
+      "(x=COLS-1, y=LINES-1)",
+      "(x=0, y=0)"
+    ],
+    "soluzioni": [
+      "(x=0, y=LINES-1)"
+    ],
+    "tipologia": "singola"
+  },
+  {
+    "domanda": "La funzione delch():",
+    "opzioni": [
+      "Cancella l'intera riga su cui si trova il cursore, muovendo in alto le linee che seguono",
+      "Cancella il carattere sotto il cursore e sposta i caratteri seguenti ad esso verso sinistra",
+      "Sovrascrive con spazi bianchi ogni posizione dello schermo"
+    ],
+    "soluzioni": [
+      "Cancella il carattere sotto il cursore e sposta i caratteri seguenti ad esso verso sinistra"
+    ],
+    "tipologia": "singola"
+  },
+  {
+    "domanda": "Utilizzando i threads è possibile il verificarsi di una 'race condition'",
+    "opzioni": [
+      "Si",
+      "No, soltanto in ambito processi",
+      "Dipende dal numero di threads, se sono meno di 3 non può verificarsi"
+    ],
+    "soluzioni": [
+      "Si"
+    ],
+    "tipologia": "singola"
+  },
+  {
+    "domanda": "Il meccanismo di attivazione di un thread rappresenta:",
+    "opzioni": [
+      "Una operazione molto onerosa",
+      "Non esiste un meccanismo di attivazione in ambito thread",
+      "Una operazione poco onerosa"
+    ],
+    "soluzioni": [
+      "Una operazione poco onerosa"
+    ],
+    "tipologia": "singola"
+  },
+  {
+    "domanda": "Se un thread esegue un lock con un mutex ed un secondo thread tenta di eseguire un lock sullo stesso mutex:",
+    "opzioni": [
+      "Il secondo thread ottiene sempre una return immediata e continua l'esecuzione delle successive righe di codice",
+      "Il secondo thread viene terminato",
+      "Il secondo thread viene posto in attesa"
+    ],
+    "soluzioni": [
+      "Il secondo thread viene posto in attesa"
+    ],
+    "tipologia": "singola"
+  },
+  {
+    "domanda": "Dire se la seguente istruzione è sufficiente per inizializzare correttamente un mutex:",
+    "opzioni": [
+      "Si, è sufficiente",
+      "La sintassi è incorretta",
+      "No, non è sufficiente"
+    ],
+    "soluzioni": [
+      "Si, è sufficiente"
+    ],
+    "tipologia": "singola",
+    "img" : "lab_026.png"
+  },
+  {
+    "domanda": "Dire se la seguente affermazione è corretta: 'Il secondo argomento da passare alla funzione pthread_mutex_init è un puntatore ad un oggetto mutex_attribute, che specifica gli attributi del mutex'",
+    "opzioni": [
+      "Si, è corretta",
+      "No, non è corretta",
+      "Solo l'ultima parte è corretta"
+    ],
+    "soluzioni": [
+      "Si, è corretta"
+    ],
+    "tipologia": "singola"
+    
   }
 ]
