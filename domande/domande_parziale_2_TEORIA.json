@@ -580,5 +580,13 @@
       "13,00"
     ],
     "tipologia": "aperta"
+  },
+  {
+    "domanda": "L'architettura di un calcolatore ha 1024 Megabyte di memoria massima di primo livello, l'indirizzamento è su 26 bit, e la dimensione di una riga della tabella delle pagine è di 15 bit. Quale è la dimensione in byte di una pagina",
+    "opzioni": [],
+    "soluzioni": [
+      "32768"
+    ],
+    "tipologia": "aperta"
   }
 ]
